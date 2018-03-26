@@ -10,14 +10,20 @@ export default class Cuaca extends React.Component {
         forecast: {
           main: '-',
           description: '-',
-          temp: 0
+          temp: '-',
+          pressure: '-',
+          humidity: '-',
+          sea_level: '-',
+          wind_speed: '-',
+          sunrise: '-',
+          sunset: '-'
         }
       };
     }
 
-    getWeather= () => {
-    let url = 'http://api.openweathermap.org/data/2.5/weather?q='+this.state.city+'&appid=85b2e6749c380d03195743d130733967&units=metric';
-    fetch(url)
+    getWeather= () =>{
+    let url = 'http://api.openweathermap.org/data/2.5/weather?q=' + this.state.city + '&appid=547e623a913f1fd7c15224590bcf2bfd&units=metric';
+    fetch (url)
     .then((response) => response.json())
     .then((responseJson) => {
       //console.log(responseJson);
@@ -25,121 +31,172 @@ export default class Cuaca extends React.Component {
         forecast: {
           main: responseJson.weather[0].main,
           description: responseJson.weather[0].description,
-          temp: responseJson.main.temp
+          temp: responseJson.main.temp,
+          pressure: responseJson.main.pressure,
+          humidity: responseJson.main.humidity,
+          sea_level: responseJson.main.sea_level,
+          wind_speed: responseJson.wind.speed,
+          sunrise: responseJson.sys.sunrise,
+          sunset: responseJson.sys.sunset
         }
       });
     });
   }
-
     render() {
       return (
         <View style={styles.containerMain}>
           <View style={styles.box1}>
-            <Text style={styles.text1}>Prakiraan Cuaca</Text>
+            <Text style={styles.text1}>Prakiraan Cuaca Sederhana</Text>
           </View>
           <View style={styles.box2}>
-              <TextInput
-                style={styles.text1}
-                placeholder="Masukkan Nama Kota"
-                onChangeText={(city) => this.setState({ city })}
-              />
+                <TextInput
+                  style={styles.text1}
+                  placeholder="Masukkan Nama Kota"
+                  onChangeText={(city) => this.setState({ city })}
+                />
+                <Button
+                onPress={() => this.getWeather()}
+                  title="Lihat"
+                  color="#2E7D32"
+                  accessibilityLabel="Klik untuk melihat"
+                />
+              </View>
 
-              <Button
-              onPress={
-                () => this.getWeather()
-              }
-              title="Lihat"
-              color="#2E7D32"
-              accessibilityLabel="Klik untuk melihat"
-              />
-          </View>
-          <View style={styles.box3}>
-            <Text style={{ padding: 10, fontSize: 20 }} >
-              Kota = {this.state.city} {'\n'}
-              Cuaca = {this.state.forecast.main} {'\n'}
-              Description = {this.state.forecast.description} {'\n'}
-              Temp = {this.state.forecast.temp} {"'Celcius"}
-            </Text>
-          </View>
-          <View style={styles.box5}>
-            <Text style={styles.text1}>Ajul-App (React-Native)</Text>
+              <View style={styles.box3}>
+
+                <View style={styles.box4}>
+                  <View style={styles.box5}>
+                    <Text style={styles.text2}>
+                      Cuaca = {this.state.forecast.main} {'\n'}
+                    </Text>
+                  </View>
+                  <View style={styles.box5}>
+                    <Text style={styles.text2}>
+                      Deskripsi = {this.state.forecast.description} {'\n'}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={styles.box4}>
+                  <View style={styles.box5}>
+                    <Text style={styles.text2} >
+                      Temperatur = {this.state.forecast.temp} {"'Celcius"}
+                    </Text>
+                  </View>
+                  <View style={styles.box5}>
+                    <Text style={styles.text2} >
+                      Tekanan = {this.state.forecast.pressure} {'\n'}
+                    </Text>
+                  </View>
+                </View>
+
+                <View style={styles.box4}>
+                  <View style={styles.box5}>
+                    <Text style={styles.text2} >
+                      Kelembapan = {this.state.forecast.humidity} {'\n'}
+                    </Text>
+                  </View>
+                  <View style={styles.box5}>
+                    <Text style={styles.text2} >
+                      Tinggi air laut = {this.state.forecast.sea_level} {'\n'}
+                    </Text>
+                  </View>
+                </View>
+
+              <View style={styles.box4}>
+                <View style={styles.box5}>
+                  <Text style={styles.text2} >
+                    Waktu Terbit Matahari = {this.state.forecast.sunrise}
+                  </Text>
+                </View>
+                <View style={styles.box5}>
+                  <Text style={styles.text2} >
+                    Waktu Terbenam Matahari = {this.state.forecast.sunset}
+                  </Text>
+                </View>
+              </View>
+
+            </View>
+
+          <View style={styles.box6}>
+            <Text style={styles.text1}>Ndra_Purteja (React-Native)</Text>
           </View>
         </View>
       );
     }
-}
-
-const styles = StyleSheet.create({
-  containerMain: {
-    backgroundColor: '#34495E',
-    flex: 1,
-    flexDirection: 'column',
-  },
-
-  box1: {
-    backgroundColor: '#013243',
-    flex: 1,
-    justifyContent: 'center'
-  },
-
-  box2: {
-    backgroundColor: '#67809F',
-    flex: 2,
-    justifyContent: 'center'
-  },
-
-  box3: {
-    backgroundColor: '#52B3D9',
-    flex: 4,
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    // alignItems: 'center',
-    marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10
-  },
-
-  box4: {
-    backgroundColor: '#52B3D9',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10
-  },
-
-  box5: {
-    backgroundColor: '#013243',
-    flex: 1,
-    margin: 10
-  },
-
-  box6: {
-    width: 50,
-     height: 50,
-     backgroundColor: '#E4F1FE',
-     justifyContent: 'center',
-     alignItems: 'center',
-  },
-
-  box7: {
-    backgroundColor: '#52B3D9',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginLeft: 10,
-    marginRight: 10
-  },
-
-  text: {
-    padding: 30, fontSize: 20, color: 'white', textAlign: 'center'
-  },
-
-  text1: {
-    padding: 30, fontSize: 20, color: 'white', textAlign: 'center', fontWeight: 'bold'
   }
 
-});
+  const styles = StyleSheet.create({
+    containerMain: {
+      backgroundColor: '#34495E',
+      flex: 1,
+      flexDirection: 'column',
+    },
+
+    box1: {
+      backgroundColor: '#013243',
+      flex: 1,
+      justifyContent: 'center'
+    },
+
+    box2: {
+      backgroundColor: '#255691',
+      flex: 1,
+      justifyContent: 'center'
+    },
+
+    box3: {
+      backgroundColor: '#4a9186',
+      flex: 4,
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      // alignItems: 'center',
+      marginTop: 10,
+      marginLeft: 10,
+      marginRight: 10,
+      marginBottom: 10
+    },
+
+    box4: {
+      backgroundColor: '#52B3D9',
+      flexDirection: 'row',
+      flex: 2,
+    },
+
+    box5: {
+      backgroundColor: '#c6cbd1',
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      marginTop: 10,
+      marginLeft: 10,
+      marginRight: 10
+    },
+
+    box6: {
+      backgroundColor: '#4a9186',
+      flex: 1,
+      justifyContent: 'center'
+    },
+
+    text: {
+      padding: 30,
+      fontSize: 20,
+      // color: 'white',
+      // textAlign: 'center'
+    },
+
+    text1: {
+      padding: 30,
+      fontSize: 20,
+      color: 'white',
+      textAlign: 'center',
+      fontWeight: 'bold'
+    },
+
+    text2: {
+      padding: 10,
+      fontSize: 15
+    }
+  });
